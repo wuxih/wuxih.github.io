@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloaded Images</title>
+    <style>
+        .image-container {
+            display: inline-block;
+            margin: 10px;
+            position: relative;
+        }
+        .image-container img {
+            max-width: 300px;
+            max-height: 300px;
+        }
+        .image-container .size-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Downloaded Images</h1>
+    <div id="images"></div>
+    <script>
+        const imagesDiv = document.getElementById('images');
+        fetch('image_metadata.json')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(image => {
+                    const container = document.createElement('div');
+                    container.className = 'image-container';
+
+                    const img = document.createElement('img');
+                    img.src = `downloaded_images/${image.name}`;
+                    container.appendChild(img);
+
+                    const sizeBadge = document.createElement('div');
+                    sizeBadge.className = 'size-badge';
+                    sizeBadge.textContent = `${(image.size / (1024 * 1024)).toFixed(2)} MB`;
+                    container.appendChild(sizeBadge);
+
+                    imagesDiv.appendChild(container);
+                });
+            });
+    </script>
+</body>
+</html>
